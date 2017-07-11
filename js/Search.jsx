@@ -4,7 +4,7 @@ import Pokemon from './Pokemon.jsx'
 export default class Search extends Component{
     state = {
         name : "",
-        s: ''
+        results: []
     }
     handleNameChange = event => {
         this.setState({
@@ -14,14 +14,29 @@ export default class Search extends Component{
 
     handleSubmit = event => {
         event.preventDefault();
-        this.props.pokemons.map(pokemon => {
-            if(pokemon.key === this.state.name.toLowerCase()) {
-                this.setState({s: 'hello'})
-            }
+
+        // console.log("Pokemons for search: ", this.props.pokemons);
+
+        const searchResult = this.props.pokemons.filter((pokemon) => {
+          return pokemon.name === this.state.name.toLowerCase();
         });
+
+        this.setState({results: searchResult});
+
+        console.log("searchResult: ", searchResult);
+
+
+        // this.props.pokemons.map(pokemon => {
+        //     if(pokemon.key === this.state.name.toLowerCase()) {
+        //         this.setState({s: <Pokemon />})
+        //     }
+        // });
     }
 
     render(){
+      const {results} = this.state;
+      const pokemon = results[0] || {};
+
         return (
           <div>
             <form onSubmit={this.handleSubmit}>
@@ -34,7 +49,8 @@ export default class Search extends Component{
                     <button type='submit'>Search</button>
                 </label>
             </form>
-            {this.state.s}
+            {pokemon.name && <Pokemon key={pokemon.name} name={pokemon.name} details={pokemon}/>}
+            {!pokemon.name && <p>Not found / no results</p>}
           </div>
         )
     }

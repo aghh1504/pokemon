@@ -3,29 +3,36 @@ import MorePokeInfo from './MorePokeInfo.jsx';
 
 export default class Pokemon extends React.Component {
     state = {
-        pokemonSprite: []
+        pokemonSprite: {}
     };
     componentDidMount() {
         fetch(this.props.details.url)
           .then(response => response.json())
             .then(data => {
-              this.setState({pokemonSprite: this.state.pokemonSprite.concat(data)});
+              this.setState({pokemonSprite: data});
           });
     }
-    renderSprite = () => {
-        return this.state.pokemonSprite.map((a, index) => {
-            return (
-                <div key={index}>
-                    <img src={a.sprites.front_default}/>
-                </div>
-            )
-        })
+    renderSprite = (pokemonSprite) => {
+      return (
+          <div>
+              <img src={pokemonSprite.sprites.front_default}/>
+               <h4>{pokemonSprite.name}</h4>
+          </div>
+      )
     }
     render() {
+      const {pokemonSprite} = this.state;
         return (
+          <div>
+          {pokemonSprite.name ?
             <div>
-            {this.renderSprite()}
-            <MorePokeInfo details={this.props.details}/>
-        </div>;)
+              {this.renderSprite(pokemonSprite)}
+              <MorePokeInfo sprite={pokemonSprite}/>
+            </div>
+            :
+            <div>Loading...</div>
+          }
+          </div>
+      )
     }
 }

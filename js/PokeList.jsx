@@ -2,13 +2,13 @@ import React from 'react';
 import MorePokeInfo from './MorePokeInfo.jsx';
 import Pokemon from './Pokemon.jsx';
 import Search from './Search.jsx';
-import MorePokeInfo from './MorePokeInfo.jsx';
 
 // import pokeball from '../pokeball.gif';
 
     class PokeList extends React.Component{
         state = {
             name : '',
+            pokemons: []
         };
         componentDidMount() {
             fetch('https://pokeapi.co/api/v2/pokemon/')
@@ -19,24 +19,26 @@ import MorePokeInfo from './MorePokeInfo.jsx';
                             name : "Nie odnaleziono pokemonów",
                         });
                     } else {
-                        const pokemon = data.results.map( pokemon => {
-                          console.log('poken', pokemon);
-                            return (
-                                <Pokemon key={pokemon.name} name={pokemon.name} details={pokemon}/>
-                            )
-                        });
-                        this.setState({
-                            name : pokemon,
-                        });
+                      this.setState({
+                        pokemons: data.results
+                      });
                     }
                 });
         }
         render(){
-            console.log('name', this.state.name);
+            const {pokemons} = this.state;
+
             return (
                 <div>
-                    <Search pokemons={this.state.name}/>
-                    <ul>{this.state.name}</ul>
+                    <Search pokemons={pokemons}/>
+
+                    <ul>
+                    {pokemons.length > 0 &&
+                      pokemons.map((pokemon)=>{
+                        return <Pokemon key={pokemon.name} details={pokemon} />
+                      })
+                    }
+                    </ul>
                 </div>
             )
         }

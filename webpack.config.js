@@ -1,5 +1,5 @@
 module.exports = {
-    entry: ["whatwg-fetch", "./js/index.jsx"],
+    entry: ["./js/index.jsx"],
     output: {
       filename: "out.js"
     },
@@ -8,26 +8,24 @@ module.exports = {
     },
     watch: true,
     module: {
-        loaders: [
+        rules: [
             {
-                test: /\.jsx$/,
+                test: /\.txt$/,
+                use: 'raw-loader'
+            },
+            {
+                test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-                loader: "babel",
+                loader: "babel-loader",
                 query: {
                     cacheDirectory: true,
-                    presets: ["es2015", 'stage-2', "react"]
+                      presets: ["es2015", 'stage-2', "react"]
                 }
             },
             {
                 test: /\.scss$/,
                 loader: ["style-loader", "css-loader", "sass-loader"]
             },
-            {
-                test: /\.txt$/,
-                use: 'raw-loader'
-            }
-        ],
-        rules: [
             {
                 test: /\.txt$/,
                 use: 'raw-loader'
